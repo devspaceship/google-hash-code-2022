@@ -95,6 +95,13 @@ def get_available_contributor(
     return selected_contributor
 
 
+def can_be_mentored(role: str, level: int, taken: list[Contributor]) -> bool:
+    for contributor in taken:
+        if role in contributor.skills and contributor.skills[role] >= level:
+            return True
+    return False
+
+
 def solve(
     contributors: list[Contributor], projects: list[Project]
 ) -> list[FilledProject]:
@@ -102,8 +109,10 @@ def solve(
 
     solution = []
     for project in tqdm(projects):
-        taken = []
+        taken: list[Contributor] = []
         for role, level in project.roles:
+            if can_be_mentored(role, level, taken):
+                level -= 1
             contributor = get_available_contributor(
                 contributors, taken, project.start_date, role, level
             )
@@ -112,6 +121,10 @@ def solve(
             taken.append(contributor)
 
         if len(taken) == len(project.roles):
+            for contributor, (role, level) in zip(taken, project.roles):
+                contributor.available = project.best_before
+                if contributor.skills[role] <= level:
+                    contributor.skills[role] += 1
             solution.append(
                 FilledProject(project.name, [contributor.name for contributor in taken])
             )
