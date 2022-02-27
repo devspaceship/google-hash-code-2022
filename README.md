@@ -13,3 +13,15 @@ pip install -r requirements.txt
 ```console
 python solve.py
 ```
+
+## Scores
+
+| File  |   Score   |
+| :---: | :-------: |
+|   A   |    30     |
+|   B   |  292 756  |
+|   C   |  160 941  |
+|   D   |  65 918   |
+|   E   | 1 314 161 |
+|   F   |  282 958  |
+| Total | 2 116 764 |
